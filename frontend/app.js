@@ -1,4 +1,5 @@
-async function create(){
+async function create(event){
+if(event) event.preventDefault();
 
 const title=document.getElementById("title").value
 const secret=document.getElementById("secret").value
