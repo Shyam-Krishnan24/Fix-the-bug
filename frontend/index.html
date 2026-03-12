@@ -1,22 +1,79 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Hackathon App</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Access System</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<h1>Hackathon Debug App</h1>
+<!-- PARTICLES -->
+<div class="particles">
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
 
-<input id="userId" placeholder="user id" value="demo-user">
-<input id="title" placeholder="title">
-<input type="password" id="secret" placeholder="secret">
+<div class="main-container">
+    <!-- CREATE DOCUMENT SECTION -->
+    <div class="container">
+        <div class="card">
+            <h1>📄 Document Manager</h1>
 
-<button onclick="create()">Create</button>
+            <form id="createForm" onsubmit="create(event)">
+                <div class="inputBox">
+                    <input 
+                        type="text" 
+                        id="userId" 
+                        value="demo-user"
+                        required
+                    >
+                    <label>User ID</label>
+                </div>
 
-<div id="list"></div>
+                <div class="inputBox">
+                    <input 
+                        type="text" 
+                        id="title"
+                        required
+                    >
+                    <label>Document Title</label>
+                </div>
+
+                <div class="inputBox">
+                    <input 
+                        type="password" 
+                        id="secret"
+                        required
+                    >
+                    <label>Secret Password</label>
+                </div>
+
+                <button type="submit" onclick="create()">Create Document</button>
+            </form>
+
+            <div id="message" class="message"></div>
+        </div>
+    </div>
+
+    <!-- DOCUMENTS LIST SECTION -->
+    <div class="documents-section">
+        <h2>Your Documents</h2>
+        <div id="list" class="documents-list">
+            <p class="loading">Loading documents...</p>
+        </div>
+    </div>
+</div>
 
 <script src="app.js"></script>
-
 </body>
 </html>
