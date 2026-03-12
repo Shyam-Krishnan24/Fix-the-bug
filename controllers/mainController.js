@@ -1,8 +1,6 @@
 const service=require("../services/mainService")
 
-function getUserId(req){
-return String(req.headers["x-user-id"]||"anonymous")
-}
+
 
 function handleError(res,err){
 const status=err.status||500
