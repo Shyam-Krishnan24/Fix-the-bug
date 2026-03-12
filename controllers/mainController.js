@@ -7,6 +7,16 @@ const status=err.status||500
 res.status(status).json({error:err.message||"internal server error"})
 }
 
+function getUserId(req){
+const id=req.headers["x-user-id"]
+if(!id){
+const err=new Error("missing x-user-id header")
+err.status=401
+throw err
+}
+return id.trim()
+}
+
 exports.create=(req,res)=>{
 try{
 const item=service.create(req.body,getUserId(req))
