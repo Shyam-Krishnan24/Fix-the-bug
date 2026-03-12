@@ -1,17 +1,61 @@
 const fs=require("fs")
+const pathLib=require("path")
 
-exports.readData=function(path){
+function safePath(filePath){
+const baseDir=pathLib.resolve(process.cwd(),"data")
+const resolved=pathLib.resolve(process.cwd(),filePath)
 
-const raw=fs.readFileSync(path)
+if(!resolved.startsWith(baseDir+pathLib.sep)){
+const err=new Error("invalid storage path")
+err.status=400
+throw err
+}
 
-return JSON.parse(raw)
+if(pathLib.extname(resolved)!==".json"){
+const err=new Error("invalid storage file type")
+err.status=400
+throw err
+}
+
+return resolved
+}
+
+exports.readData=function(filePath){
+
+const resolved=safePath(filePath)
+
+if(!fs.existsSync(resolved)) return []
+
+const raw=fs.readFileSync(resolved,"utf8")
+
+if(!raw.trim()) return []
+
+try{
+const parsed=JSON.parse(raw)
+return Array.isArray(parsed)?parsed:[]
+}catch(err){
+const parseErr=new Error("data store is corrupted")
+parseErr.status=500
+throw parseErr
+}
 
 }
 
-exports.writeData=function(path,data){
+exports.writeData=function(filePath,data){
 
-fs.writeFile(path,JSON.stringify(data,null,2),(err)=>{
-if(err) console.log(err)
-})
+const resolved=safePath(filePath)
+
+if(!Array.isArray(data)){
+const err=new Error("invalid storage payload")
+err.status=400
+throw err
+}
+
+const dir=pathLib.dirname(resolved)
+const name=pathLib.basename(resolved)
+const tempPath=pathLib.join(dir,`${name}.tmp`)
+
+fs.writeFileSync(tempPath,JSON.stringify(data,null,2),"utf8")
+fs.renameSync(tempPath,resolved)
 
 }
